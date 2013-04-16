@@ -16,6 +16,14 @@ def read_file(file_name, value=None):
   f.close()
   return data
 
+def classify(data_set, sa):
+  reputation = 0
+  for d in data_set:
+    # Write results to a file
+    value = sa.classify(d)
+    reputation += value
+  return reputation
+
 def main():
   parser = argparse.ArgumentParser()
   parser.add_argument('-p', '--postrain', nargs='?',
@@ -40,18 +48,20 @@ def main():
   print args
   # get training data
   training_set = read_file(args.postrain, 1)+read_file(args.negtrain, -1)
-  print training_set
+  #print training_set
   # create analyzer
   # train
   sa = sentiment_analysis.SentimentAnalyser(training_set)
-  print sa.features
+  #print sa.features
   # analyze
   if args.test:
     test_set = read_file(args.postest, 1)+read_file(args.negtest, -1)
     print sa.test_accuracy(test_set)
   if args.analyse:
     data_sets = [read_file(f) for f in args.evalfiles]
-    print data_sets
+    #print data_sets
+    for d in data_sets:
+      print classify(d, sa)
   # present/save results
 
 if __name__ == '__main__':

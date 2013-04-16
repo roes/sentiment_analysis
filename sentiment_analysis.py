@@ -21,6 +21,9 @@ class SentimentAnalyser:
         self.tweet_features, tweets)
     return nltk.classify.accuracy(self.classifier, test_set)
 
+  def classify(self, tweet):
+    return self.classifier.classify(self.tweet_features(tweet))
+
 def get_all_features(training_set):
   wordlist = []
   for (words, sentiment) in training_set:
