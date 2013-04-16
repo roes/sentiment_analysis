@@ -3,12 +3,15 @@
 import argparse
 import sentiment_analysis
 
-def read_file(file_name, value):
+def read_file(file_name, value=None):
   data = []
   f = open(file_name, 'r')
   line = f.readline()
   while line != '':
-    data.append([[e.lower() for e in line.split()], value])
+    if value is None:
+      data.append([e.lower() for e in line.split()])
+    else:
+      data.append([[e.lower() for e in line.split()], value])
     line = f.readline()
   f.close()
   return data
@@ -47,7 +50,8 @@ def main():
     test_set = read_file(args.postest, 1)+read_file(args.negtest, -1)
     print sa.test_accuracy(test_set)
   if args.analyse:
-    print 'analysing'
+    data_sets = [read_file(f) for f in args.evalfiles]
+    print data_sets
   # present/save results
 
 if __name__ == '__main__':
