@@ -1,24 +1,17 @@
 #!/usr/bin/env python
 
 import argparse
+import sentiment_analysis
 
-from nltk.classify import NaiveBayesClassifier
-
-def read_training_set(positive_training_set, negative_training_set):
-  training_set = []
-  f = open(positive_training_set, 'r')
+def read_file(file_name, value):
+  data = []
+  f = open(file_name, 'r')
   line = f.readline()
   while line != '':
-    training_set.append([line, 1])
+    data.append([[e.lower() for e in line.split()], value])
     line = f.readline()
   f.close()
-  f = open(negative_training_set, 'r')
-  line = f.readline()
-  while line != '':
-    training_set.append([line, -1])
-    line = f.readline()
-  f.close()
-  return training_set
+  return data
 
 def main():
   parser = argparse.ArgumentParser()
@@ -43,9 +36,11 @@ def main():
   args = parser.parse_args()
   print args
   # get training data
-  training_set = read_training_set(args.postrain, args.negtrain)
+  training_set = read_file(args.postrain, 1)+read_file(args.negtrain, -1)
   print training_set
   # create analyzer
+  sa = sentiment_analysis.SentimentAnalyser(training_set)
+  print sa.features
   # train
   # analyze
   # present/save results
