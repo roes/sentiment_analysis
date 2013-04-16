@@ -29,20 +29,25 @@ def main():
   parser.add_argument('--negtest', nargs='?',
                       default='negative_test.txt',
                       help='Location of file with negative test data')
-  parser.add_argument('--eval', nargs='?', const=1, default=0,
-                      help='Causes the program to evaluate supplied data')
+  parser.add_argument('-a', '--analyse', nargs='?', const=1, default=0,
+                      help='Causes the program to analyse supplied data')
   parser.add_argument('--evalfiles', nargs='*',
-                      help='Location of files containing eval data')
+                      help='Location of files containing data to be analysed')
   args = parser.parse_args()
   print args
   # get training data
   training_set = read_file(args.postrain, 1)+read_file(args.negtrain, -1)
   print training_set
   # create analyzer
+  # train
   sa = sentiment_analysis.SentimentAnalyser(training_set)
   print sa.features
-  # train
   # analyze
+  if args.test:
+    test_set = read_file(args.postest, 1)+read_file(args.negtest, -1)
+    print sa.test_accuracy(test_set)
+  if args.analyse:
+    print 'analysing'
   # present/save results
 
 if __name__ == '__main__':
