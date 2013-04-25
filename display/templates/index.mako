@@ -27,8 +27,13 @@
 
 <body>
 
+  <div id="header">
+    <div class="wrap">
+      <h1>Online Reputation Management</h1>
+    </div>
+  </div>
+
   <div id="page">
-    <h1>Online Reputation Management</h1>
     <ul id="companies">
     % if companies:
       % for company in companies:
