@@ -20,6 +20,8 @@ You only need to do this once or if you want to use new data files.
 ## Running the server
 
 Requires __python__ and [pyramid](http://www.pylonsproject.org/projects/pyramid/download).
-Also requires you to have created the database, see above. It should found here: `db/reputation.db`
+Also requires you to have created the database, see above. It should be found here: `db/reputation.db`
 
 Run `python display.py`
+
+Go to `localhost:8080` in your browser.
