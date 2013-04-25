@@ -44,7 +44,7 @@ if __name__ == '__main__':
   settings['reload_all'] = True
   settings['debug_all'] = True
   settings['mako.directories'] = os.path.join(here, 'templates')
-  settings['db'] = os.path.join(here, 'reputation.db')
+  settings['db'] = os.path.join(here, 'db/reputation.db')
   # configuration setup
   config = Configurator(settings=settings)
   config.add_route('index', '/')
