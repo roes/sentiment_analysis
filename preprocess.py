@@ -2,8 +2,8 @@
 
 import argparse
 
-happy_emot = [":)", ":-)", "=)", ":D", "=D"]
-sad_emot = [":(", ":-(", "=("]
+happy_emot = [":)", ":-)", "=)", ":D", "=D", ": )"]
+sad_emot = [":(", ":-(", ": ("]
 
 # Reads a file of tweets and removes unwanted parts.
 
@@ -13,25 +13,70 @@ def read_file(file_name):
   line = f.readline()
   while line != '':
     if accept_tweet(line):
-      print "accepted : " + line
       data.append(line)
+    else:
+      print "Removing tweet: " + line
     line = f.readline()
   f.close()
+  i = 0
   for tweet in data:
-    process_words(tweet)
-  #print data
+    tweet = process_words(tweet)
+    data[i] = tweet
+    i += 1
+  for ptweet in data:
+      print ptweet
   return data
 
-# Changes and removes unwanted words in the tweet.
-# Should look for repeated sequences of characters, 
-# maybe emoticons, at-signs etc.
+# Changes and removes unwanted features in the tweet.
+# Looks for repeated sequences of characters, 
+# at-signs and links at the moment..
 def process_words(tweet):
   data = tweet.split()
+  i = 0
   for word in data:
-    #Check for unwanted words..
-    #TODO
-    print word
-  return
+    #Usernames
+    if word.startswith('@'):
+      data[i] = "USERNAME"
+      i += 1
+      continue
+    #Links
+    if isURL(word):
+      data[i] = "URL"
+      i += 1
+      continue
+    #Repeated characters
+    word = repeated_letter(word)
+    data[i] = word
+    i += 1
+  return data
+
+#Checks for repeated characters in a word and cuts the repetition to two.
+
+def repeated_letter(word):
+  prev_letter = ''
+  num_rep = 0
+  res = ""
+  for letter in word:
+    if letter == prev_letter:
+      num_rep += 1
+      if num_rep > 1: #throw the letter
+        continue
+      else:
+        res += letter
+    else:
+      num_rep = 0
+      prev_letter = letter
+      res += letter
+  return res
+
+
+#Returns true if the string is considered an URL.
+
+def isURL(word):
+  if word.startswith("http"):
+    return True
+  else:
+    return False
 
 # Determines whether the tweet should be in the training set.
 # Checks for retweets and emoticons of both types (happy/sad).
@@ -42,16 +87,12 @@ def accept_tweet(tweet):
   data = ([e.lower() for e in tweet.split()])
   for word in data:
     if word == "rt":
-      print "retweet! : " + word
       return False
     elif word in happy_emot:
       happy = True
-      print "happy! : " + word
     elif word in sad_emot:
       sad = True
-      print "sad! : " + word 
   if happy and sad:
-    print "happy and sad! : " + tweet
     return False
   return True
 
@@ -77,9 +118,15 @@ def main():
   parser.add_argument('--evalfiles', nargs='*',
                       help='Location of files containing data to be analysed')
   args = parser.parse_args()
-  #print args
   # get training data
   training_set = read_file(args.postrain)+read_file(args.negtrain)
+  #Write to file here.
+  f = open('test','w')
+  for tweet in training_set:
+    for feature in tweet:
+      f.write(feature + " ")
+    f.write('\n')
+  f.close()
 
 if __name__ == '__main__':
   main()
