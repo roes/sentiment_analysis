@@ -24,9 +24,29 @@ class SentimentAnalyser:
   def classify(self, tweet):
     return self.classifier.classify(self.tweet_features(tweet))
 
-def get_all_features(training_set):
-  wordlist = []
+def get_all_features( training_set, feature_n = 1000 ):
+  label_word_freq_dist = ConditionalFreqDist()
+  word_freq_dist = FreqDist()
   for (words, sentiment) in training_set:
-    wordlist.extend(words)
-  wordlist = nltk.FreqDist(wordlist)
-  return wordlist.keys()
+    for word in words:
+      word_freq_dist.inc(word.lower())
+      label_word_freq_dist[sentiment].inc(word.lower())
+  
+  pos_word_n = label_word_freq_dist[1].N()
+  neg_word_n = label_word_freq_dist[-1].N()
+  total_word_n = pos_word_n + neg_word_n
+  word_scores = {}
+  for word, freq in word_freq_dist.iteritems():
+    pos_score = BigramAssocMeasures.chi_sq( label_word_freq_dist[1][word],
+      (freq, pos_word_n), total_word_n )
+
+    neg_score = BigramAssocMeasures.chi_sq( label_word_freq_dist[-1][word],
+      (freq, neg_word_n), total_word_n )
+    word_scores[ word ] = pos_score + neg_score
+
+  ext_words = sorted( word_scores.iteritems, key = lambda( w, s ) : s, reverse 
+    = True )[ : feature_n ]
+
+  feature_words = [ w for w, s in ext_words ];
+
+  return feature_words
