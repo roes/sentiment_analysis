@@ -7,16 +7,20 @@ sad_emot = [":(", ":-(", ": ("]
 
 # Reads a file of tweets and removes unwanted parts.
 
-def read_file(file_name):
+def read_file(file_name, training):
   data = []
   f = open(file_name, 'r')
   line = f.readline()
   while line != '':
-    if accept_tweet(line):
-      data.append(line)
+    if training:
+      if accept_tweet(line):
+        data.append(line)
+      else:
+        print "Removing tweet: " + line
+      line = f.readline()
     else:
-      print "Removing tweet: " + line
-    line = f.readline()
+      data.append(line)
+      line = f.readline()
   f.close()
   i = 0
   for tweet in data:
@@ -105,24 +109,20 @@ def main():
   parser.add_argument('-n', '--negtrain', nargs='?',
                       default='negative_training.txt',
                       help='Location of file with negative training data')
-  parser.add_argument('-t', '--test', nargs='?', const=1, default=0,
-                      help='Causes the program to test the accuracy')
-  parser.add_argument('--postest', nargs='?',
-                      default='positive_test.txt',
-                      help='Location of file with positive test data')
-  parser.add_argument('--negtest', nargs='?',
-                      default='negative_test.txt',
-                      help='Location of file with negative test data')
-  parser.add_argument('-a', '--analyse', nargs='?', const=1, default=0,
-                      help='Causes the program to analyse supplied data')
-  parser.add_argument('--evalfiles', nargs='*',
-                      help='Location of files containing data to be analysed')
+  parser.add_argument('-t', '--training', nargs='?',
+                      const=True, default=False, 
+                      help='Use to analyse training data')
   args = parser.parse_args()
-  # get training data
-  training_set = read_file(args.postrain)+read_file(args.negtrain)
+  if args.training:
+    #Training data
+    processed_set = read_file(args.postrain, True)+read_file(args.negtrain,True)
+  else:
+    #TODO
+    processed_set = read_file(args.postrain, False)
+
   #Write to file here.
   f = open('test','w')
-  for tweet in training_set:
+  for tweet in processed_set:
     for feature in tweet:
       f.write(feature + " ")
     f.write('\n')
