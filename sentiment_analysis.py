@@ -2,7 +2,6 @@ import nltk
 from nltk.classify import NaiveBayesClassifier
 from nltk.probability import FreqDist, ConditionalFreqDist
 from nltk.metrics import BigramAssocMeasures
-import math
 
 class SentimentAnalyser:
 
