@@ -39,11 +39,8 @@ def get_all_features( training_set, feature_n = 100 ):
   total_word_n = pos_word_n + neg_word_n
   word_scores = {}
   for word, freq in word_freq_dist.iteritems():
-    pos_score = BigramAssocMeasures.chi_sq( label_word_freq_dist[ 1 ][ word ], 
+    word_scores[ word ] = BigramAssocMeasures.chi_sq( label_word_freq_dist[ 1 ][ word ], 
       (freq, pos_word_n), total_word_n )
-    neg_score = BigramAssocMeasures.chi_sq( label_word_freq_dist[ -1 ][ word ], 
-      (freq, neg_word_n), total_word_n )
-    word_scores[ word ] = pos_score + neg_score
 
   ext_words = sorted( word_scores.iteritems(), key = lambda( w, s ) : s, reverse 
     = True )[ : feature_n ]
