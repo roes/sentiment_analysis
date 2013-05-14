@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import sys
 
 happy_emot = [":)", ":-)", "=)", ":D", "=D", ": )"]
 sad_emot = [":(", ":-(", ": ("]
@@ -113,15 +114,19 @@ def main():
                       const=True, default=False, 
                       help='Use to analyse training data')
   args = parser.parse_args()
+  processed_set = []
   if args.training:
     #Training data
-    processed_set = read_file(args.postrain, True)+read_file(args.negtrain,True)
+    if len(sys.argv) < 3:
+      print "Must give a file to process.."
+      return
+    processed_set = read_file(sys.argv[2], True)
   else:
     #TODO
     processed_set = read_file(args.postrain, False)
 
   #Write to file here.
-  f = open('test','w')
+  f = open(str(sys.argv[2] + 'a'),'w')
   for tweet in processed_set:
     for feature in tweet:
       f.write(feature + " ")
