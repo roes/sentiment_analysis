@@ -26,13 +26,14 @@ class SentimentAnalyser:
   def classify(self, tweet):
     return self.classifier.classify(self.tweet_features(tweet))
 
-def get_all_features( training_set, feature_n = 100 ):
+def get_all_features( training_set, feature_n = 1000 ):
   label_word_freq_dist = ConditionalFreqDist()
   word_freq_dist = FreqDist()
   for (words, sentiment) in training_set:
     for word in words:
-      word_freq_dist.inc( word.lower() )
-      label_word_freq_dist[ sentiment ].inc( word.lower() )
+      if len(word) > 2:
+        word_freq_dist.inc( word.lower() )
+        label_word_freq_dist[ sentiment ].inc( word.lower() )
   
   pos_word_n = label_word_freq_dist[1].N()
   neg_word_n = label_word_freq_dist[-1].N()
