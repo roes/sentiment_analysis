@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+# Script for running sentiment analysis
+# Requires the files positive.txt and negative.txt to be present
+# in this folder, this is the training and test data.
+# Also requires the files to be analysed to be in the folder tweets/
+#
+set -x
+
+if [ $1 -a $1 = "p" ]
+then
+  python preprocess.py -p positive.txt
+  python preprocess.py -n negative.txt
+  LINES=`wc -l < positive_preprocessed.txt`
+  COUNT=$((LINES-2000))
+  split -l $COUNT positive_preprocessed.txt
+  mv xaa positive_training.txt
+  mv xab positive_test.txt
+  LINES=`wc -l < negative_preprocessed.txt`
+  COUNT=$((LINES-2000))
+  split -l $COUNT negative_preprocessed.txt
+  mv xaa negative_training.txt
+  mv xab negative_test.txt
+  files=`ls tweets/`
+  for f in $files;
+  do
+    python preprocess.py -d tweets/$f
+  done
+fi
+
+if [ $1 -a $1 = "a" ]
+then
+  python run_sa.py -t -a --evalfiles tweets/*_preprocessed.txt
+fi
