@@ -25,7 +25,12 @@ def index_view(request):
 def graph_view_ajax(request):
   company = request.matchdict['company']
   rs = request.db.execute("select day, value from reputation where company = ? order by day", (company,))
-  reputation = [[row[0], row[1]] for row in rs.fetchall()]
+  reputation = []
+  aggregated_reputation = 0
+  for row in rs.fetchall():
+    aggregated_reputation += row[1]
+    reputation.append([row[0], aggregated_reputation])
+  #reputation = [[row[0], row[1]] for row in rs.fetchall()]
   return {'reputation': reputation, 'company':company}
 
 @subscriber(NewRequest)
