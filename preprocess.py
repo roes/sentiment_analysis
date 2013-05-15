@@ -16,8 +16,6 @@ def read_file(file_name, training):
     if training:
       if accept_tweet(line):
         data.append(line)
-      else:
-        print "Removing tweet: " + line
       line = f.readline()
     else:
       data.append(line)
@@ -28,8 +26,6 @@ def read_file(file_name, training):
     tweet = process_words(tweet)
     data[i] = tweet
     i += 1
-  for ptweet in data:
-      print ptweet
   return data
 
 # Changes and removes unwanted features in the tweet.
@@ -40,13 +36,15 @@ def process_words(tweet):
   i = 0
   for word in data:
     #Usernames
+    if word.endswith(';0'):
+      word = word.rstrip(';0')
     if word.startswith('@'):
-      data[i] = "USERNAME"
+      data[i] = ""
       i += 1
       continue
     #Links
     if isURL(word):
-      data[i] = "URL"
+      data[i] = ""
       i += 1
       continue
     #Repeated characters
