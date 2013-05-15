@@ -23,7 +23,7 @@ def read_file(file_name, training):
   f.close()
   i = 0
   for tweet in data:
-    tweet = process_words(tweet)
+    tweet = process_words(training,tweet)
     data[i] = tweet
     i += 1
   return data
@@ -31,10 +31,19 @@ def read_file(file_name, training):
 # Changes and removes unwanted features in the tweet.
 # Looks for repeated sequences of characters, 
 # at-signs and links at the moment..
-def process_words(tweet):
+def process_words(training,tweet):
   data = tweet.split()
   i = 0
   for word in data:
+    if training:
+      if word in happy_emot:
+	data[i] = ""
+        i += 1
+        continue
+      if word in sad_emot:
+	data[i] = ""
+        i += 1
+        continue
     #Usernames
     if word.endswith(';0'):
       word = word.rstrip(';0')
