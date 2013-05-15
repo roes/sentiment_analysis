@@ -22,15 +22,20 @@ then
   python preprocess.py -p positive.txt
   python preprocess.py -n negative.txt
   LINES=`wc -l < positive_preprocessed.txt`
-  COUNT=$((LINES-2000))
-  split -l $COUNT positive_preprocessed.txt
-  mv xaa positive_training.txt
+  POS_LINES=$((LINES-2000))
+  split -l $POS_LINES positive_preprocessed.txt
+  mv xaa positive_temp.txt
   mv xab positive_test.txt
   LINES=`wc -l < negative_preprocessed.txt`
-  COUNT=$((LINES-2000))
-  split -l $COUNT negative_preprocessed.txt
-  mv xaa negative_training.txt
+  NEG_LINES=$((LINES-2000))
+  split -l $NEG_LINES negative_preprocessed.txt
+  mv xaa negative_temp.txt
   mv xab negative_test.txt
+  COUNT=$((POS_LINES<NEG_LINES?POS_LINES:NEG_LINES))
+  grep -m $COUNT -e '^' positive_temp.txt > positive_training.txt
+  grep -m $COUNT -e '^' negative_temp.txt > negative_training.txt
+  rm positive_temp.txt
+  rm negative_temp.txt
 set +x
   files=`ls tweets/`
 set -x
