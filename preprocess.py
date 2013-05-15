@@ -111,28 +111,40 @@ def accept_tweet(tweet):
 
 def main():
   parser = argparse.ArgumentParser()
+  parser.add_argument('-d', '--datafile', nargs='?',
+                      help='Location of file with data to analyse')
   parser.add_argument('-p', '--postrain', nargs='?',
-                      default='positive_training.txt',
+                      #default='positive_training.txt',
                       help='Location of file with positive training data')
   parser.add_argument('-n', '--negtrain', nargs='?',
-                      default='negative_training.txt',
+                      #default='negative_training.txt',
                       help='Location of file with negative training data')
-  parser.add_argument('-t', '--training', nargs='?',
-                      const=True, default=False, 
-                      help='Use to analyse training data')
+  #parser.add_argument('-t', '--training', nargs='?',
+  #                    const=True, default=False,
+  #                    help='Use to analyse training data')
   args = parser.parse_args()
   processed_set = []
-  if args.training:
+  file_name = "";
+  #if args.training:
     #Training data
-    if len(sys.argv) < 3:
-      print "Must give a file to process.."
-      return
-    processed_set = read_file(sys.argv[2], True)
+  #  if len(sys.argv) < 3:
+  #    print "Must give a file to process.."
+  #    return
+  if args.postrain:
+    processed_set = read_file(args.postrain, True)
+    file_name = args.postrain[:-4] + "_preprocessed.txt"
+  elif args.negtrain:
+    processed_set = read_file(args.negtrain, True)
+    file_name = args.negtrain[:-4] + "_preprocessed.txt"
+  elif args.datafile:
+    processed_set = read_file(args.datafile, False)
+    file_name = args.datafile + "_preprocessed.txt"
   else:
-    processed_set = read_file(sys.argv[1], False)
+    print "Must give a file to process.."
+    return
 
   #Write to file here.
-  f = open(str(sys.argv[2] + 'a'),'w')
+  f = open(file_name,'w')
   for tweet in processed_set:
     for feature in tweet:
       f.write(feature + " ")
