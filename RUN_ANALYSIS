@@ -38,11 +38,12 @@ set -x
   do
     python preprocess.py -d tweets/$f
   done
+  python run_sa.py -t
 fi
 
 if [ $1 -a $1 = "a" ]
 then
-  python run_sa.py -t -a --evalfiles tweets/*_preprocessed.txt
+  python run_sa.py -a --evalfiles tweets/*_preprocessed.txt
   python aggregate.py -d tweets/*_result.txt
   now=`date +"%Y-%m-%d"`
   mv aggregated_results.csv display/data/data_$now.csv
