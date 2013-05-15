@@ -120,8 +120,7 @@ def main():
       return
     processed_set = read_file(sys.argv[2], True)
   else:
-    #TODO
-    processed_set = read_file(args.postrain, False)
+    processed_set = read_file(sys.argv[1], False)
 
   #Write to file here.
   f = open(str(sys.argv[2] + 'a'),'w')
