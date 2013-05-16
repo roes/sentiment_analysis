@@ -19,13 +19,17 @@ def main():
   args = parser.parse_args()
 
   output = open('aggregated_results.csv', 'w')
+  percent_output = open('percentage_results.csv', 'w')
   for f in args.datafiles:
     company, date, _ = f.rpartition('/')[2].split('_',2)
     values = read_file(f)
     value = 0
+    count = 0.0
     for v in values:
       value += int(v)
+      count += 1.0
     output.write(company+';'+date+';'+str(value)+'\n')
+    percent_output.write(company+';'+date+';'+str(value/count)+'\n')
   output.close()
 
 if __name__ == '__main__':
