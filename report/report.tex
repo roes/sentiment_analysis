@@ -20,17 +20,11 @@
 \begin{document}
 \maketitle
 \begin{abstract}
-This paper describes an implementation that harvests data from twitter for sentiment analysis regarding a certain organization or product. 
+This paper describes an implementation that harvests data from twitter for sentiment analysis regarding a certain organization or product.
 
-- What is described and implemented 
+The tweets are harvested using the latest twitter API, then pre-processed to more effectively and accurately get processed by the classifier. The classifier used is a Naive Bayes classifier trained utilizing emoticons.  
 
-For harvesting tweets we used the Twitter API....
-
-Classifier - Naive Bayes
-
-Before training the classifier with the twitter data, the data was pre-processed to more effectively and accurately get processed. 
-
-- Conclusions/Results
+Results are calculated using tweets harvested from four different brands over a period of eight days. Our analyser produces good results and behaved as a machine learning algorithm is expected to. However, improvements can be made. We suggest assigning weights to tweets and adding a neutral evaluation rather than just positive or negative in order to get a more accurate result.
 
 \end{abstract}
 \newpage
@@ -75,7 +69,7 @@ Most of the previous sentiment analysis’ has been done on longer texts, such a
 \subsection{Weighing of Tweets}
 When dealing with tweets, one question appears: should we weight all our tweets the same? In our life experience, the opinion of an expert weight more than a nobody’s opinion. Therefore, weighting tweets with different value is a intuitive idea. Pagerank is a good algorithm for finding relevant and important web pages, so trying to develop a weighting algorithm from pagerank seems to be a good idea.
 
-The main idea of pagerank algorithm is that the probability a user jump from node i to node j is influenced by two main factors. First, the links in node i and econd, a random jump from node i to node j.
+The main idea of pagerank algorithm is that the probability a user jump from node i to node j is influenced by two main factors. First, the links in node i and second, a random jump from node i to node j.
 
 Therefore, it seems reasonable to use a similar idea when trying to weight tweets and we found a report \cite{weigh2} detailing such an approach.
 
