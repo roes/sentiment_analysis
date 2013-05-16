@@ -17,7 +17,7 @@
     data.addColumn('number', 'Reputation');
     data.addRows(rawdata.reputation);
 
-    var options = {'title':'Reputation change over time'};
+    var options = {'title':'Reputation change over time for ' + rawdata.company};
     var chart = new google.visualization.LineChart($("#graph_div")[0]);
     chart.draw(data, options);
   }
